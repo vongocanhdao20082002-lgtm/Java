@@ -144,9 +144,6 @@ public class Java2weeksday2{
                 System.out.println(st.toString());
                 i++;
             }
-            //hellooooo
-            System.err.println("Hello world!!!"); 
         }
-        
     }
 }
