@@ -144,6 +144,6 @@ public class Java2weeksday2{
                 System.out.println(st.toString());
                 i++;
             }
-        }
+        }//try-with-resources
     }
 }
