@@ -8,13 +8,13 @@ public class Java2weeksday2 {
         private String name;
         private int age;
         //Constructor
-        public Student(String mssv, String name, int age) {
+        public Student(String mssv, String name, int age){
             setMssv(mssv);
             setName(name);
             setAge(age);
         }
         //Constructor mặc định
-        public Student() {}
+        public Student(){}
         //Getter
         public String getMssv(){return mssv;}
         public String getName(){return name;}
@@ -33,36 +33,36 @@ public class Java2weeksday2 {
             this.age = age;
         }
         @Override
-        public String toString() {
+        public String toString(){
             return String.format("Mssv: %s, Ho va ten: %s, Tuoi: %d.", mssv, name, age);
         }
         //check input
         private void checkMssv(String text){
-            if (text.isEmpty())
+            if(text.isEmpty())
                 throw new IllegalArgumentException("Khong duoc de trong!!!");
-            else if (!text.startsWith("SV"))
+            else if(!text.startsWith("SV"))
                 throw new IllegalArgumentException("Mssv phai bat dau bang SV...");
-            else if (text.length() != 5)
+            else if(text.length() != 5)
                 throw new IllegalArgumentException("Mssv chi co 5 ky tu!!!");
-            else if (text.equals("SV000"))
+            else if(text.equals("SV000"))
                 throw new IllegalArgumentException("Mssv SV000 khong ton tai!!!");
             else{
-                for (int i = 2; i < text.length(); i++) {
-                if (!Character.isDigit(text.charAt(i)))
-                    throw new IllegalArgumentException("3 ky tu cuoi phai la so!!!");
+                for(int i = 2; i < text.length(); i++){
+                    if(!Character.isDigit(text.charAt(i)))
+                        throw new IllegalArgumentException("3 ky tu cuoi phai la so!!!");
                 }
             }
         }
-        private void checkName(String text) {
-            if (text.isEmpty())
+        private void checkName(String text){
+            if(text.isEmpty())
                 throw new IllegalArgumentException("Ten khong duoc de trong!!!");
-            for (char c : text.toCharArray()) {
-                if (Character.isDigit(c))
+            for(char c : text.toCharArray()){
+                if(Character.isDigit(c))
                     throw new IllegalArgumentException("Ten khong co so!!!");
             }
         }
-        private void checkAge(int age) {
-            if (age <= 18)
+        private void checkAge(int age){
+            if(age <= 18)
                 throw new IllegalArgumentException("Tuoi phai lon hon 18!!!");
         }
         //Input student
@@ -70,23 +70,23 @@ public class Java2weeksday2 {
             System.out.println("-----Nhap thong tin sinh vien----");
             //Mssv
             while(true){
-                try {
+                try{
                     System.out.print("Mssv: ");
                     String mssvStr = sc.nextLine().toUpperCase().trim();
                     setMssv(mssvStr);
                     break;
-                } catch (Exception e) {
+                } catch(IllegalArgumentException e){
                     System.err.println(e.getMessage());
                 }
             }
             //Name
             while(true){
-                try {
+                try{
                     System.out.print("Ho va ten: ");
                     String nameStr = sc.nextLine().trim();
                     setName(nameStr);
                     break;
-                } catch (Exception e) {
+                } catch(IllegalArgumentException e){
                     System.err.println(e.getMessage());
                 }
             }
@@ -98,9 +98,9 @@ public class Java2weeksday2 {
                     int age = Integer.parseInt(ageStr);
                     setAge(age);
                     break;
-                } catch (NumberFormatException e) {
+                } catch(NumberFormatException e){
                     System.err.println("Tuoi phai la so nguyen!!!");
-                } catch (Exception e) {
+                } catch(IllegalArgumentException e){
                     System.err.println(e.getMessage());
                 }
             }
@@ -119,7 +119,7 @@ public class Java2weeksday2 {
         }
     }
     //Main
-    public static void main(String[] args) {
+    public static void main(String[] args){
         try(Scanner sc = new Scanner(System.in)){
             ArrayList<Student> list = new ArrayList<>();
             //Nhập thông tin sinh viên
