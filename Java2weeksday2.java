@@ -95,8 +95,8 @@ public class Java2weeksday2 {
                 try {
                     System.out.print("Tuoi: ");
                     String ageStr = sc.nextLine().trim();
-                    int age = Integer.parseInt(ageStr);
-                    setAge(age);
+                    int ageInt = Integer.parseInt(ageStr);
+                    setAge(ageInt);
                     break;
                 } catch(NumberFormatException e){
                     System.err.println("Tuoi phai la so nguyen!!!");
