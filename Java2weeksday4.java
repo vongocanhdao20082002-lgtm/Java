@@ -1,420 +1,381 @@
-
 import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Java2weeksday4{
     //abstract class Person
     public static abstract class Person{
-        String id;
-        String name;
-        //method
-        public abstract String displayInfo();
-    }
-    //Class Student extends Person
-    public static class Student extends Person{
-        int age;
-        double gpa;
-        //Contructor
-        public Student(){}
-        public Student(String id, String name, int age, double gpa){
-            setID(id);
-            setName(name);
-            setAGE(age);
-            setGPA(gpa);
-        }
-        //Getter
-        public String getID(){
-            return id;
-        }
-        public String getName(){
-            return name;
-        }
-        public int getAGE(){
-            return age;
-        }
-        public double getGPA(){
-            return gpa;
-        }
-        //Setter
-        public void setID(String id){
-            validateID(id);
+        private String id;
+        private String name;
+        //contructor
+        public Person(String id, String name){
             this.id = id;
-        }
-        public void setName(String name){
-            validateName(name);
             this.name = name;
         }
-        public void setAGE(int age){
-            validateAGE(age);
-            this.age = age;
-        }
-        public void setGPA(double gpa){
-            validateGPA(gpa);
-            this.gpa = gpa;
-        }
-        //Validate
-        public static void validateID(String idStr){
-            if(idStr == null || idStr.isEmpty()) 
-                throw new IllegalArgumentException("ID khong duoc de trong!!!");
-            else if(idStr.equals("ID000"))
-                throw new IllegalArgumentException("ID000 khong ton tai");
-            else if(!idStr.matches("^ID\\d{3}$"))
-                throw new IllegalArgumentException("ID sai format! Format dung: ID001,...");
-        }
-        public static void validateName(String nameStr){
-            if(nameStr == null || nameStr.isEmpty()) 
+        //getter
+        public String getID(){return id;}
+        public String getName(){return name;}
+        //abstract String displayInfo()
+        public abstract String displayInfo();
+        //validateName
+        protected void validateName(String nameStr){
+            if(nameStr == null || nameStr.isEmpty())
                 throw new IllegalArgumentException("Ten khong duoc de trong!!!");
-            else if(!nameStr.matches("^[a-zA-ZÀ-ỹ\\x20']+$"))
-                throw new IllegalArgumentException("Ten chi bao gom chu cai, dau cach ( ) va dau nhay don (')!!!");
+            else if(!nameStr.matches("^[A-Za-zÀ-ỹ ']+$"))
+                throw new IllegalArgumentException("Ten bao gom chu cai, dau cach ( ) va dau nhay don (')!!!");
         }
-        public static void validateAGE(int ageInt){
-            if(ageInt <= 18) 
-                throw new IllegalArgumentException("Tuoi phai lon hon 18!!!");
+    }
+    //class Student extends Person
+    public static class Student extends Person{
+        private int age;
+        private double gpa;
+        //Contructor
+        public Student(String idStr, String nameStr, int ageInt, double gpaDou){
+            super(idStr, nameStr); 
+            validateName(nameStr);
+            validateID(idStr);
+            setAGE(ageInt);
+            setGPA(gpaDou);
         }
-        public static void validateGPA(double gpaDou){
-            if(gpaDou < 0 || gpaDou > 4) 
-                throw new IllegalArgumentException("GPA chi tu 0 den 4!!!");
+        //Getter
+        public int getAGE(){return age;}
+        public double getGPA(){return gpa;}
+        //Setter
+        public void setAGE(int ageInt){
+            validateAGE(ageInt);
+            this.age = ageInt;
         }
-        //Override
+        public void setGPA(double gpaDou){
+            validateGPA(gpaDou);
+            this.gpa = gpaDou;
+        }
+        //validate
+        public void validateID(String idStr){
+            if(idStr == null || idStr.isEmpty())
+                throw new IllegalArgumentException("ID khong duoc de trong!!!");
+            else if(idStr.equals("SV000"))
+                throw new IllegalArgumentException("SV000 khong ton tai!!!");
+            else if(!idStr.matches("^SV\\d{3}$"))
+                throw new IllegalArgumentException("ID sai dinh dang. Dinh dang dung vd: SV001,...!!!");
+        }
+        public void validateAGE(int ageInt){
+            if(ageInt < 18)
+                throw new IllegalArgumentException("Tuoi phai lon hon hoac bang 18!!!");
+        }
+        public void validateGPA(double gpaDou){
+            if(gpaDou < 0 || gpaDou > 4)
+                throw new IllegalArgumentException("GPA phai nam trong khoang tu 0 den 4!!!");
+        }
+        //Override displayInfo()
         @Override
         public String displayInfo(){
-            return "ID: " + id + "\nName: " + name + "\nAge: " + age + "\nGPA: " + gpa;
+            return "ID: " + getID() + "\nName: " + getName() + "\nTuoi: " + age + "\nGPA: " + gpa;
         }
     }
-    //Class Teacher extends Person
+    //class Teacher extends Person
     public static class Teacher extends Person{
-        double salary;
-        String subject;
+        private String subject;
+        private double salary;
         //Contructor
-        public Teacher(){}
-        public Teacher(String id, String name, double salary, String subject){
-            setID(id);
-            setName(name);
-            setSalary(salary);
-            setSubject(subject);
+        public Teacher(String idStr, String nameStr, String subjectStr, double salaryDou){
+            super(idStr, nameStr); 
+            validateID(idStr);
+            validateName(nameStr);
+            setSubject(subjectStr);
+            setSalary(salaryDou);
         }
         //Getter
-        public String getID(){
-            return id;
-        }
-        public String getName(){
-            return name;
-        }
-        public double getSalary(){
-            return salary;
-        }
-        public String getSubject(){
-            return subject;
-        }
+        public String getSubject(){return subject;}
+        public double getSalary(){return salary;}
         //Setter
-        public void setID(String id){
-            validateID(id);
-            this.id = id;
+        public void setSubject(String subjectStr){
+            validateSubject(subjectStr);
+            this.subject = subjectStr;
         }
-        public void setName(String name){
-            validateName(name);
-            this.name = name;
+        public void setSalary(double salaryDou){
+            validateSalary(salaryDou);
+            this.salary= salaryDou;
         }
-        public void setSalary(double salary){
-            validateSalary(salary);
-            this.salary = salary;
-        }
-        public void setSubject(String subject){
-            validateSubject(subject);
-            this.subject = subject;
-        }
-        //Validate
-        public static void validateID(String idStr){
-            if(idStr == null || idStr.isEmpty()) 
+        //validate
+        public void validateID(String idStr){
+            if(idStr == null || idStr.isEmpty())
                 throw new IllegalArgumentException("ID khong duoc de trong!!!");
             else if(idStr.equals("GV000"))
-                throw new IllegalArgumentException("GV000 khong ton tai");
+                throw new IllegalArgumentException("GV000 khong ton tai!!!");
             else if(!idStr.matches("^GV\\d{3}$"))
-                throw new IllegalArgumentException("ID sai format! Format dung: GV001,...");
+                throw new IllegalArgumentException("ID sai dinh dang. Dinh dang dung vd: GV001,...!!!");
         }
-        public static void validateName(String nameStr){
-            if(nameStr == null || nameStr.isEmpty()) 
-                throw new IllegalArgumentException("Ten khong duoc de trong!!!");
-            else if(!nameStr.matches("^[a-zA-ZÀ-ỹ\\x20']+$"))
-                throw new IllegalArgumentException("Ten chi bao gom chu cai, dau cach ( ) va dau nhay don (')!!!");
+        public void validateSubject(String subjectStr){
+            if(subjectStr == null || subjectStr.isEmpty())
+                throw new IllegalArgumentException("Mon hoc khong duoc de trong!!!");
+            else if(!subjectStr.matches("^[A-Za-zÀ-ỹ ]+$"))
+                throw new IllegalArgumentException("Ten bao gom chu cai va dau cach ( )!!!");
         }
-        public static void validateSalary(double salaryDou){
-            if(salaryDou <= 0) 
+        public void validateSalary(double salaryDou){
+            if(salaryDou <= 0)
                 throw new IllegalArgumentException("Tien luong phai lon hon 0!!!");
         }
-        public static void validateSubject(String subjectStr){
-            if(subjectStr == null || subjectStr.isEmpty()) 
-                throw new IllegalArgumentException("Mon hoc khong duoc de trong!!!");
-            else if(!subjectStr.matches("^[a-zA-ZÀ-ỹ\\x20]+$"))
-                throw new IllegalArgumentException("Mon hoc chi bao gom chu cai, dau cach ( )!!!");
-        }
-        //Override
+        //Override displayInfo()
         @Override
         public String displayInfo(){
-            return "ID: " + id + "\nHo va ten: " + name + "\nTien luong: " + salary + "\nMon hoc: " + subject;
+            return "ID: " + getID() + "\nName: " + getName() + "\nMon hoc: " + subject + "\nTien luong: " + salary;
         }
     }
-    //interface Imanage<T>
-    public static interface Imanage<T>{
-        public void add(T t);
-        public void remove(String id);
-        public void findByID(String id);
-        public void displayAll(); 
+    //interface Imanager
+    interface Imanager{
+        void add(Person p);
+        void displayInfoAll();
+        void displayStudent();
+        void displayTeacher();
+        void findInfoByID(String idStr);
+        void deleteByID(String idStr);
+        double avgGPAstudent();
+        String displayInfoByMaxGPA();
     }
-    //Class PersonManager implements Imanage<Person>
-    public static class PersonManager implements Imanage<Person>{
+    //class Manager implements Imanager
+    public static class Manager implements Imanager{
         ArrayList<Person> personList = new ArrayList<>();
-        //@Override
         @Override
         public void add(Person p){
-            if(!checkID(p.id))
-                personList.add(p);
-            else throw new IllegalArgumentException("Da co ID nay!!!");
+            for(Person person : personList)
+                if(p.getID().equals(person.getID()))
+                    throw new IllegalArgumentException("ID nay da co trong danh sach!!!");  
+            personList.add(p);
         }
         @Override
-        public void remove(String idStr){
-            if(!checkID(idStr))
-                throw new IllegalArgumentException("Khong co id nay trong danh sach!!!");
-            else for(int i = 0; i < personList.size(); i++){
-                if(idStr.equals(personList.get(i).id)){
+        public void displayInfoAll(){
+            int i = 0;
+            for(Person p : personList){
+                i++;
+                System.out.printf("----Thong tin ca nhan thu %d----\n",i);
+                System.out.println(p.displayInfo());
+            }
+            if(i == 0)
+                System.err.println("Danh sach khong co gi!!!");
+        }
+        @Override
+        public void displayStudent(){
+            int i = 0;
+            for(Person p : personList)
+                if(p instanceof Student st){
+                    i++;
+                    System.out.printf("----Thong tin sinh vien thu %d----\n",i);
+                    System.out.println(st.displayInfo());
+                }
+            if(i == 0)
+                System.out.println("Danh sach sinh vien khong co gi!!!");
+        }
+        @Override
+        public void displayTeacher(){
+            int i = 0;
+            for(Person p : personList)
+                if(p instanceof Teacher te){
+                    i++;
+                    System.out.printf("----Thong tin giao vien thu %d----\n",i);
+                    System.out.println(te.displayInfo());
+                }
+            if(i == 0)
+                System.out.println("Danh sach giao vien khong co gi!!!");
+        }
+        @Override
+        public void findInfoByID(String idStr){
+            for(Person person : personList)
+                if(person.getID().equals(idStr)){
+                    System.out.println("Da tim thay!!!");
+                    System.out.println(person.displayInfo());
+                    return;
+                }     
+            throw new IllegalArgumentException("ID nay khong co trong danh sach!!!");    
+        }
+        @Override
+        public void deleteByID(String idStr){
+            for(int i = 0; i < personList.size(); i++)
+                if(personList.get(i).getID().equals(idStr)){
                     personList.remove(i);
                     return;
-                } 
-            }
+                }
+            throw new IllegalArgumentException("ID nay khong co trong danh sach!!!");    
         }
         @Override
-        public void findByID(String idStr){
-            if(!checkID(idStr))
-                throw new IllegalArgumentException("Khong co id nay trong danh sach!!!");
-            else for(int i = 0; i < personList.size(); i++){
-                if(idStr.equals(personList.get(i).id)){
-                    System.out.println(personList.get(i).displayInfo());
-                    return;
-                } 
+        public double avgGPAstudent(){
+            int count = 0;
+            double sumGPA = 0;
+            for(Person person : personList){
+                if(person instanceof Student st){
+                    count++;
+                    sumGPA += st.getGPA();
+                }
             }
+            if(count == 0)
+                throw new IllegalArgumentException("Danh sach sinh vien khong co gi!!!");    
+            else return sumGPA/count;
         }
         @Override
-        public void displayAll(){
-            int i=1;
-            if(personList == null || personList.isEmpty())
-                throw new IllegalArgumentException("Khong co thong tin nao trong danh sach!!!");
-            else for(Person p : personList){
-                System.out.println("--------Thong tin thu " + i + "--------");
-                System.out.println(p.displayInfo());
-                i++;
-            }
-        }
-        //checkID
-        private boolean checkID(String idStr){
+        public String displayInfoByMaxGPA(){
+            double maxGPA = -1;
+            Student maxStudent = null;
             for(Person p : personList){
-                if(p.id.equals(idStr))
-                    return true;
+                if(p instanceof Student st)
+                    if(maxGPA < st.getGPA()){
+                        maxGPA = st.getGPA();
+                        maxStudent = st;
+                    }
             }
-            return false;
+            if(maxStudent == null)
+                return "Danh sach sinh vien khong co gi!!!";  
+            else return "----Thong tin sinh vien co GPA cao nhat----\n" + maxStudent.displayInfo();
         }
     }
-    //Print Menu
+    //printMenu
     public static void printMenu(){
-        System.out.println("--------Chuc nang--------");
-        System.out.println("1. Them Student");
-        System.out.println("2. Them Teacher");
-        System.out.println("3. Xoa theo ID");
-        System.out.println("4. Tim theo ID");
-        System.out.println("5. Hien thi tat ca");
+        System.out.println("--------Menu Chuc Nang--------");
+        System.out.println("1. Them Person");
+        System.out.println("2. Hien thi toan bo danh sach");
+        System.out.println("3. Hien thi rieng");
+        System.out.println("4. Tim Person theo id");
+        System.out.println("5. Xoa Person theo id");
+        System.out.println("6. Tinh GPA trung binh cua Student");
+        System.out.println("7. Tim Student co GPA cao nhat");
         System.out.println("0. Thoat");
         System.out.print("Chon chuc nang so: ");
     }
-    //Tiếp tục hay dừng
-    public static boolean yesORno(Scanner sc){
-        while(true){
-            System.out.print("Co tiep tuc khong? Tra loi y/n: ");
-            String answer =  sc.nextLine().toLowerCase().trim();
-            switch(answer){
-                case "y" -> {return true;}
-                case "n" -> {return false;}
-                default -> throw new IllegalArgumentException("Chi tra loi y hoặc n!!!");
-            }
-        }
+    //printMenuType
+    public static void printMenuType(String text){
+        System.out.printf("--------Menu Chuc Nang: %s--------\n",text);
+        System.out.println("1. Student");
+        System.out.println("2. Teacher");
+        System.out.println("0. Thoat");
+        System.out.print("Chon chuc nang so: ");
     }
     //Main
     public static void main(String[] args) {
         try(Scanner sc = new Scanner(System.in)){
-            PersonManager personManagers = new PersonManager();
+            Manager manager = new Manager();
+            boolean repeat = true;
             while(true){
-                try {
+                try{
                     printMenu();
-                    int choose = Integer.parseInt(sc.nextLine());
-                    switch(choose){
+                    int chooseMenu = Integer.parseInt(sc.nextLine().trim());
+                    switch(chooseMenu){
                         case 1 -> {
-                            while(true){
-                                try {
-                                    String idStr, nameStr;
-                                    int ageInt;
-                                    double gpaDou;
-                                    System.out.println("----Chuc Nang: Them Student----");
-                                    //Nhập ID
-                                    while(true){
-                                        System.out.print("ID: ");
-                                        try {
-                                            idStr = sc.nextLine().toUpperCase().trim();
-                                            Student.validateID(idStr);
-                                            break;
-                                        } catch(IllegalArgumentException i){
-                                            System.err.println(i.getMessage());
+                            while(repeat == true){
+                                try{
+                                    printMenuType("Them Person");
+                                    int chooseMenuType = Integer.parseInt(sc.nextLine().trim());
+                                    switch(chooseMenuType){
+                                        case 1 -> {
+                                            Student student = null;
+                                            while(true){
+                                                try{
+                                                    System.out.print("Nhap ID: ");
+                                                    String idStr = sc.nextLine().toUpperCase().trim();
+                                                    System.out.print("Nhap ho va ten: ");
+                                                    String nameStr = sc.nextLine().trim();
+                                                    System.out.print("Nhap tuoi: ");
+                                                    int ageInt = Integer.parseInt(sc.nextLine().trim());
+                                                    System.out.print("Nhap GPA: ");
+                                                    double gpaDou = Double.parseDouble(sc.nextLine().trim());
+                                                    student = new Student(idStr, nameStr, ageInt, gpaDou);
+                                                    break;
+                                                }catch(NumberFormatException e){
+                                                    System.err.println("Nhap sai kieu du lieu!");
+                                                }catch(IllegalArgumentException i){
+                                                    System.err.println(i.getMessage());
+                                                } 
+                                            }
+                                            manager.add(student);
+                                            System.out.println("Da them!!!");
                                         }
-                                    }
-                                    //Nhập họ và tên
-                                    while(true){
-                                        System.out.print("Ho va ten: ");
-                                        try {
-                                            nameStr = sc.nextLine().toUpperCase().trim();
-                                            Student.validateName(nameStr);
-                                            break;
-                                        } catch(IllegalArgumentException i){
-                                            System.err.println(i.getMessage());
+                                        case 2 -> {
+                                            Teacher teacher = null;
+                                            while(true){
+                                                try{
+                                                    System.out.print("Nhap ID: ");
+                                                    String idStr = sc.nextLine().toUpperCase().trim();
+                                                    System.out.print("Nhap ho va ten: ");
+                                                    String nameStr = sc.nextLine().trim();
+                                                    System.out.print("Nhap mon hoc: ");
+                                                    String subjectStr = sc.nextLine().toUpperCase().trim();
+                                                    System.out.print("Nhap tien luong: ");
+                                                    double salaryDou = Double.parseDouble(sc.nextLine().trim());
+                                                    teacher = new Teacher(idStr, nameStr, subjectStr, salaryDou);
+                                                    break;
+                                                }catch(NumberFormatException e){
+                                                    System.err.println("Nhap sai kieu du lieu!");
+                                                }catch(IllegalArgumentException i){
+                                                    System.err.println(i.getMessage());
+                                                } 
+                                            }
+                                            manager.add(teacher);
+                                            System.out.println("Da them!!!");
                                         }
+                                        case 0 -> {repeat = false;}
+                                        default -> throw  new IllegalArgumentException("Phai nhap so tu 0 den 2!!!");
                                     }
-                                    //Nhập tuổi
-                                    while(true){
-                                        System.out.print("Tuoi: ");
-                                        try {
-                                            ageInt = Integer.parseInt(sc.nextLine().trim());
-                                            Student.validateAGE(ageInt);
-                                            break;
-                                        }  catch(NumberFormatException n){
-                                            System.err.println("Tuoi la so nguyen!!!");
-                                        } catch(IllegalArgumentException i){
-                                            System.err.println(i.getMessage());
-                                        }
-                                    }
-                                    //Nhập GPA
-                                    while(true){
-                                        System.out.print("GPA: ");
-                                        try {
-                                            gpaDou = Double.parseDouble(sc.nextLine().trim());
-                                            Student.validateGPA(gpaDou);
-                                            break;
-                                        }  catch(NumberFormatException n){
-                                            System.err.println("GPA phai la so!!!");
-                                        } catch(IllegalArgumentException i){
-                                            System.err.println(i.getMessage());
-                                        }
-                                    }
-                                    Student st = new Student(idStr, nameStr, ageInt, gpaDou);
-                                    personManagers.add(st);
-                                    if(!yesORno(sc))
-                                        break;
-                                } catch (IllegalArgumentException i){
+                                }catch(NumberFormatException i){
+                                    System.err.println("Phai nhap so!!!");
+                                }catch(IllegalArgumentException i){
                                     System.err.println(i.getMessage());
                                 }
                             }
+                            repeat = true;
                         }
-                        case 2 -> {                            
-                            while(true){
-                                try {
-                                    String idStr, nameStr, subjectStr;
-                                    double salaryDou;
-                                    System.out.println("----Chuc Nang: Them Teacher----");
-                                    //Nhập ID
-                                    while(true){
-                                        System.out.print("ID: ");
-                                        try {
-                                            idStr = sc.nextLine().toUpperCase().trim();
-                                            Teacher.validateID(idStr);
-                                            break;
-                                        } catch(IllegalArgumentException i){
-                                            System.err.println(i.getMessage());
-                                        }
-                                    }
-                                    //Nhập họ và tên
-                                    while(true){
-                                        System.out.print("Ho va ten: ");
-                                        try {
-                                            nameStr = sc.nextLine().toUpperCase().trim();
-                                            Teacher.validateName(nameStr);
-                                            break;
-                                        } catch(IllegalArgumentException i){
-                                            System.err.println(i.getMessage());
-                                        }
-                                    }
-                                    //Nhập salary
-                                    while(true){
-                                        System.out.print("Tien luong: ");
-                                        try {
-                                            salaryDou = Double.parseDouble(sc.nextLine().trim());
-                                            Teacher.validateSalary(salaryDou);
-                                            break;
-                                        }  catch(NumberFormatException n){
-                                            System.err.println("Tien luong phai la so!!!");
-                                        } catch(IllegalArgumentException i){
-                                            System.err.println(i.getMessage());
-                                        }
-                                    }
-                                    //Nhập subject
-                                    while(true){
-                                        System.out.print("Mon hoc: ");
-                                        try {
-                                            subjectStr = sc.nextLine().trim();
-                                            Teacher.validateSubject(subjectStr);
-                                            break;
-                                        }  catch(IllegalArgumentException i){
-                                            System.err.println(i.getMessage());
-                                        }
-                                    }
-                                    Teacher te = new Teacher(idStr, nameStr, salaryDou, subjectStr);
-                                    personManagers.add(te);
-                                    if(!yesORno(sc))
-                                        break;
-                                } catch (IllegalArgumentException i){
-                                    System.err.println(i.getMessage());
-                                }
-                            }
-                        }
+                        case 2 -> { manager.displayInfoAll();}
                         case 3 -> {
-                            while(true){
-                                try {
-                                    System.out.println("----Chuc Nang: Xoa theo ID----");
-                                    System.out.print("Nhap ID: ");
-                                    String idStr = sc.nextLine().trim().toUpperCase();
-                                    personManagers.remove(idStr);
-                                    if(!yesORno(sc))
-                                        break;
-                                } catch(IllegalArgumentException i){
-                                    System.out.println(i.getMessage());
+                            while(repeat == true){
+                                try{
+                                    printMenuType("Hien thi rieng");
+                                    int chooseMenuType = Integer.parseInt(sc.nextLine().trim());
+                                    switch(chooseMenuType){
+                                        case 1 -> {manager.displayStudent();}
+                                        case 2 -> {manager.displayTeacher();}
+                                        case 0 -> {repeat = false;}
+                                        default -> throw  new IllegalArgumentException("Phai nhap so tu 0 den 2!!!");
+                                    }
+                                }catch(NumberFormatException i){
+                                    System.err.println("Phai nhap so!!!");
+                                }catch(IllegalArgumentException i){
+                                    System.err.println(i.getMessage());
                                 }
                             }
+                            repeat = true;
                         }
                         case 4 -> {
-                            while(true){
-                                try {
-                                    System.out.println("----Chuc Nang: Tim theo ID----");
-                                    System.out.print("Nhap ID: ");
-                                    String idStr = sc.nextLine().trim().toUpperCase();
-                                    personManagers.findByID(idStr);
-                                    if(!yesORno(sc))
-                                        break;
-                                } catch(IllegalArgumentException i){
-                                    System.out.println(i.getMessage());
-                                }
+                            try {
+                                System.out.print("Tim Person co id: ");
+                                String idStr = sc.nextLine().toUpperCase().trim();
+                                manager.findInfoByID(idStr);
+                            }catch(IllegalArgumentException i){
+                                System.err.println(i.getMessage());
                             }
                         }
                         case 5 -> {
                             try {
-                                System.out.println("----Chuc Nang: Hien thi tat ca----");
-                                personManagers.displayAll();
-                            } catch(IllegalArgumentException i){
-                                System.out.println(i.getMessage());
+                                System.out.print("Xoa Person co id: ");
+                                String idStr = sc.nextLine().toUpperCase().trim();
+                                manager.deleteByID(idStr);
+                                System.out.println("Da xoa xong!!!");
+                            }catch(IllegalArgumentException i){
+                                System.err.println(i.getMessage());
                             }
                         }
+                        case 6 -> {
+                            try{
+                                System.out.print("GPA trung binh cua Student: ");
+                                System.out.println(manager.avgGPAstudent());
+                            }catch(IllegalArgumentException i){
+                                System.err.println(i.getMessage());
+                            }
+                        }
+                        case 7 -> {System.out.println(manager.displayInfoByMaxGPA());}
                         case 0 -> {return;}
-                        default -> throw new NumberFormatException("Nhap so tu 0 den 5!!!");
+                        default -> throw  new IllegalArgumentException("Phai nhap so tu 0 den 7!!!");
                     }
-                } catch(NumberFormatException n){
-                    System.err.println(n.getMessage());
+                }catch(NumberFormatException i){
+                    System.err.println("Phai nhap so!!!");
                 }catch(IllegalArgumentException i){
                     System.err.println(i.getMessage());
                 }
             }
         }
     }
-}
+} 
