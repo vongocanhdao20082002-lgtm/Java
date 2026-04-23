@@ -24,11 +24,11 @@ Day 6: File I/O + JSON
             
     - Convert:
         + Object → JSON:
-            ObjectMapper mapper = new ObjectMapper();
-            String json = mapper.writeValueAsString(student);
+            ObjectMapper objMapper = new ObjectMapper();
+            objMapper.writerWithDefaultPrettyPrinter().writeValue(new File(fileName), studentList);
         
         + JSON → Object:
-            Student st = mapper.readValue(jsonString, Student.class);
+            Student st = objMapper.readValue(jsonString, TypeReference<List<Student>>);
         Lưu ý: mapper thường dùng lại (hoặc Spring inject), không tạo nhiều lần trong thực tế.
 
 */
