@@ -1,0 +1,392 @@
+Day 9: JDBC (Java Database Connection)
+
+1. JDBC
+    - Kết nối Java ↔ MySQL
+        + Thủ công: tự viết toàn bộ cấu hình + load driver + mở kết nối bằng code Java
+            Bước 1: Tải file .zip
+                https://dev.mysql.com/downloads/connector/j/
+                Select Operating System: Platform Independent -> chọn tải file .zip
+            
+            Bước 2: Giải nén file 
+                    Copy file vào project Java2weeksday9manual/lib/ mysql-connector-j-9.7.0.jar
+                    Chạy terminal java -cp "bin;lib/mysql-connector-j-9.7.0.jar" App
+            
+            Bước 3: Thêm đoạn code vào file main.java hoặc App.java
+                import java.sql.*;
+
+                public class App {
+                    public static void main(String[] args) {
+
+                        String url = "jdbc:mysql://localhost:3306/";
+                        String user = "root";
+                        String password = "Dao@20/08/2002";
+
+                        try {
+                            // 1. Load driver
+                            Class.forName("com.mysql.cj.jdbc.Driver");
+
+                            // 2. Connect
+                            Connection conn = DriverManager.getConnection(url, user, password);
+                            Statement stmt = conn.createStatement();
+
+                            // 3. Create DB
+                            stmt.executeUpdate("CREATE DATABASE IF NOT EXISTS student_management");
+
+                            // 4. Use DB
+                            stmt.execute("USE student_management");
+
+                            // 5. Create table
+                            String createTable =
+                                    "CREATE TABLE IF NOT EXISTS student (" +
+                                    "id INT AUTO_INCREMENT PRIMARY KEY," +
+                                    "student_name VARCHAR(100)," +
+                                    "age INT," +
+                                    "email VARCHAR(100)" +
+                                    ")";
+                            stmt.executeUpdate(createTable);
+
+                            // 6. Insert (PreparedStatement)
+                            String insertSQL =
+                                    "INSERT INTO student (student_name, age, email) VALUES (?, ?, ?)";
+
+                            PreparedStatement ps = conn.prepareStatement(insertSQL);
+
+                            ps.setString(1, "An");
+                            ps.setInt(2, 20);
+                            ps.setString(3, "an@gmail.com");
+                            ps.executeUpdate();
+
+                            ps.setString(1, "Binh");
+                            ps.setInt(2, 22);
+                            ps.setString(3, "binh@gmail.com");
+                            ps.executeUpdate();
+
+                            // 7. Select
+                            ResultSet rs = stmt.executeQuery("SELECT * FROM student");
+
+                            System.out.println("===== DANH SACH SINH VIEN =====");
+                            while (rs.next()) {
+                                System.out.println(
+                                        rs.getInt("id") + " - " +
+                                        rs.getString("student_name") + " - " +
+                                        rs.getInt("age") + " - " +
+                                        rs.getString("email")
+                                );
+                            }
+
+                            // 8. Close
+                            rs.close();
+                            ps.close();
+                            stmt.close();
+                            conn.close();
+
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+
+
+        + Tự động: Java tự load driver, quản lý dependency(thư viện (code có sẵn) mà project cần để chạy), cấu hình đơn giản hơn
+            * Maven:
+                Bước 1: 
+                    Tạo project Maven: 
+                        File -> New File... -> New Java Project... -> Maven -> No Archetype... -> Nhấn "Enter" 
+                        -> Đặt tên project bằng chữ thường, số và _ -> Chọn nơi lưu project -> Nhấn "Select Destination Folder"
+                    Mở project Maven: 
+                        File -> Open Folder... -> Chọn folder cần mở -> Nhấn "Select folder"
+                
+                Bước 2: 
+                    Mở pom.xml thêm dependency: 
+                        <dependency>
+                            <groupId>com.mysql</groupId>
+                            <artifactId>mysql-connector-j</artifactId>
+                            <version>8.3.0</version>
+                        </dependency>
+                    Reload maven: chuột phải pom.xml -> Nhấn "Reload Projects"
+
+                Bước 3: Code kết nối
+                    private static final String url = "jdbc:mysql://localhost:3306/student_management";
+                    private static final String user = "root";
+                    private static final String password = "Dao@20/08/2002";
+                    //Connect DB
+                    public static Connection getConnection(){
+                        try {
+                            return DriverManager.getConnection(url, user, password);
+                        } catch (Exception e) {
+                            throw new RuntimeException("Lỗi kết nối Database!\n", e);
+                        }
+                    }
+
+            * Framework (Spring Boot)
+                Bước 1: 
+                    Tạo project Spring Boot:
+                        Truy cập https://start.spring.io 
+                        -> Chọn cấu hình:
+                            Project: Maven
+                            Language: Java
+                            Spring Boot: chọn version 3.5.14
+                            Group: com.example
+                            Artifact: student-management (Tên project)
+                            Packaging: Jar
+                            Configuration: Properties
+                            Java: 17
+                            Dependencies: Nhấn "Add" -> Spring Web, Spring Data JPA, MySQL Driver
+                        -> Nhấn "GENERATE"
+                    
+                    Cài đặt IntelliJ IDEA:
+                        https://www.jetbrains.com/help/idea/installation-guide.html#toolbox_windows
+                        -> https://www.jetbrains.com/toolbox-app/ -> Chọn ".exe" -> Nhấn "Download"
+                        -> mở app jetBrains Toolbox -> Cài IntelliJ IDEA -> Nhấn mở IntelliJ IDEA
+                        -> Nhấn "Don’t Send" -> Nhấn "Allow" -> Nhấn "Skip Import"
+
+                    Mở IntelliJ IDEA:
+                        Open -> Chọn folder -> Nhấn "Select Folder" -> Tắt check 2 ô -> Nhấn "Trust Project"
+                    
+                    Mở project Spring Boot:
+                        Open -> Chọn folder -> Nhấn "Select Folder"
+
+                Bước 2: Mở file config trong application.properties:
+				src/main/resources/application.properties
+                Thêm cấu hình:
+                    #dùng MySQL connect tới DB student_management
+                    spring.datasource.url=jdbc:mysql://localhost:3306/student_management
+                    #Username để login MySQL
+                    spring.datasource.username=root
+                    #Password
+                    spring.datasource.password=Dao@20/08/2002
+
+                    #Tự tạo / update bảng theo Entity
+                    #Không cần viết SQL create table
+                    spring.jpa.hibernate.ddl-auto=update
+
+                    #In SQL ra console
+                    spring.jpa.show-sql=true
+
+                Bước 3: Tạo package entity và file Student.java: 
+				src/main/java/com/example/tenproject/
+				Ví dụ:src/main/java/com/example/java2weeksday9springboot/entity/Student.java
+
+                Thêm đoạn code tạo bảng trong sql:
+                    package com.example.java2weeksday9springboot.entity;
+
+                    import jakarta.persistence.*;
+
+                    @Entity
+                    @Table(name = "student")
+                    public class Student {
+
+                        @Id
+                        @GeneratedValue(strategy = GenerationType.IDENTITY)
+                        // getter setter (IDE tự generate)
+                        private int id;
+                        public int getId() {
+                            return id;
+                        }
+                        public void setId(int id) {
+                            this.id = id;
+                        }
+
+                        private String studentName;
+                        public String getStudentName() {
+                            return studentName;
+                        }
+                        public void setStudentName(String studentName) {
+                            this.studentName = studentName;
+                        }
+
+                        private int age;
+                        public int getAge() {
+                            return age;
+                        }
+                        public void setAge(int age) {
+                            this.age = age;
+                        }
+
+                        private String email;
+                        public String getEmail() {
+                            return email;
+                        }
+                        public void setEmail(String email) {
+                            this.email = email;
+                        }
+                    }				
+
+
+                Bước 4: Tạo package repository và file StudentRepository.java:
+				src/main/java/com/example/java2weeksday9springboot/
+package com.example.java2weeksday9springboot.repository;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+import com.example.java2weeksday9springboot.entity.Student;
+
+public interface StudentRepository extends JpaRepository<Student, Integer> {
+}
+
+
+		Bước 5: Thêm code vào file main
+package com.example.java2weeksday9springboot;
+
+import com.example.java2weeksday9springboot.entity.Student;
+import com.example.java2weeksday9springboot.repository.StudentRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication
+public class Java2weeksday9springbootApplication implements CommandLineRunner {
+
+	@Autowired
+	private StudentRepository repo;
+
+	public static void main(String[] args) {
+		SpringApplication.run(Java2weeksday9springbootApplication.class, args);
+	}
+
+	@Override
+	public void run(String... args) {
+		Student s = new Student();
+		s.setStudentName("An");
+		s.setAge(20);
+		s.setEmail("an@gmail.com");
+
+		repo.save(s);
+		System.out.println("Insert OK");
+	}
+}
+		
+
+    - Thành phần:
+        + Connection: dùng để kết nối với Database
+                    sử dụng xong phải đóng lại.
+            Connection conn = DriverManager.getConnection(
+                "jdbc:mysql://localhost:3306/student_management", (student_management là Database)
+                "root", (user)
+                "password" (password)
+            );
+
+        + Statement: run câu lệnh sql, phù hợp cho câu lệnh sql tĩnh.
+                    sử dụng xong phải đóng lại.
+                    hiếm khi sử dụng.
+                    Không dùng với input user (dễ bị SQL Injection = chèn code SQL qua input để hack database)
+
+            String sql = "SELECT * FROM student";
+            try(Statement stmt = con.createStatement()) {
+                //Thực thi
+                ResultSet rs = stmt.executeQuery(sql);
+                //Hiển thị
+                while (rs.next()) {
+                    int id = rs.getInt("id");  //rs.getInt(1); 
+                    String name = rs.getString("name"); //rs.getInt(2);
+                    int age = rs.getInt("age");
+                    System.out.println(id + " - " + name + " - " + age);
+                }
+            }catch(SQLException e){
+                e.printStackTrace();
+            }
+
+
+        + PreparedStatement: run câu lệnh sql, phù hợp cho những câu lệnh sql có dữ liệu động (insert, update, delete, select có where).
+                            sử dụng xong phải đóng lại.
+
+            String sql = "INSERT INTO student (student_name, age, email) VALUES (?, ?, ?);";
+            try(PreparedStatement prep = con.prepareStatement(sql) /*Chứa câu lệnh sql*/){    
+                    //Gán giá trị vào sql
+                    prep.setString(1, nameStr);
+                    prep.setInt(2, ageInt);
+                    prep.setString(3, emailStr);
+                    //Thực thi sql
+                    int rows = prep.executeUpdate();
+                    if(rows > 0)
+                        System.out.println("Them sinh vien thanh cong.");
+            }catch(SQLException e){
+                e.printStackTrace();
+            }
+
+
+        + ResultSet: là kết quả của SELECT, chứa dữ liệu dạng bảng.
+                    Có dạng cursor (con trỏ)
+                    Ban đầu đứng trước dòng đầu tiên
+                    Phải gọi rs.next() để di chuyển
+                    duyệt bằng while(rs.next())
+                    Lấy dữ liệu bằng getXXX()
+            String sql = "SELECT * FROM student;";
+            try(PreparedStatement prep = con.prepareStatement(sql); /*Chứa câu lệnh sql*/
+            ResultSet rs = prep.executeQuery()){ 
+                //Hiển thị
+                int i = 0;
+                while(rs.next()){
+                    i++;
+                    System.out.println("----Thong tin sinh vien thu " + i + "----");
+                    System.out.println("ID: " + rs.getInt("id") + "\nHo va ten: " + rs.getString("student_name") + "\nTuoi: " + rs.getInt("age") 
+                    + "\nEmail: " + rs.getString("email") + "\nNgay gio nhap: " + rs.getTimestamp("created_at"));
+                }
+                if(i == 0) System.out.println("Khong co sinh vien nao trong danh sach.");
+            }catch(SQLException e){
+                e.printStackTrace();
+            }
+
+
+        + execute(): trả TRUE (SELECT) và false (INSERT/UPDATE/DELETE)
+        + executeQuery(): SELECT - trả về ResultSet
+        + executeUpdate(): INSERT, UPDATE, DELETE - trả về số dòng thực thi câu lệnh sql
+
+2. Kết nối MySQL
+    Connection conn = DriverManager.getConnection(
+        "jdbc:mysql://localhost:3306/student_management", (student_management là Database)
+        "root", (user)
+        "password" (password)
+    );
+
+3. CRUD bằng Java
+    - INSERT
+        public static void insertStudent(String nameStr, int ageInt, String emailStr){
+            String sql = "INSERT INTO student (student_name, age, email) VALUES (?, ?, ?);";
+            try(Connection con = getConnection(); //Connect DB
+                PreparedStatement prep = con.prepareStatement(sql) /*Chứa câu lệnh sql*/){    
+                    //Gán giá trị vào sql
+                    prep.setString(1, nameStr);
+                    prep.setInt(2, ageInt);
+                    prep.setString(3, emailStr);
+                    //Thực thi sql
+                    int rows = prep.executeUpdate();
+                    if(rows > 0)
+                        System.out.println("Them sinh vien thanh cong.");
+            }catch(Exception e){
+                e.printStackTrace();
+            }
+        }
+
+    - SELECT
+        public static void selectStudent(){
+            String sql = "SELECT * FROM student;";
+            try(Connection con = getConnection();
+            PreparedStatement prep = con.prepareStatement(sql); /*Chứa câu lệnh sql*/
+            ResultSet rs = prep.executeQuery()){ 
+                //Hiển thị
+                int i = 0;
+                while(rs.next()){
+                    i++;
+                    System.out.println("----Thong tin sinh vien thu " + i + "----");
+                    System.out.println("ID: " + rs.getInt("id") + "\nHo va ten: " + rs.getString("student_name") + "\nTuoi: " + rs.getInt("age") 
+                    + "\nEmail: " + rs.getString("email") + "\nNgay gio nhap: " + rs.getTimestamp("created_at"));
+                }
+                if(i == 0) System.out.println("Khong co sinh vien nao trong danh sach.");
+            }catch(Exception e){
+                e.printStackTrace();
+            }
+        }
+
+-----------------------------------------------------------------------------------------------------------------------------------------------
+Bài tập: Quản lý sinh viên (JDBC)
+Yêu cầu:
+    1. Kết nối database `student_management`
+    2. Insert 3 sinh viên bằng Java
+    3. Lấy danh sách sinh viên từ DB
+    4. In ra console
+
+Mục tiêu:
+    - Kết nối Java với MySQL bằng JDBC
+    - Thực hiện INSERT, SELECT
+    - Hiểu CRUD cơ bản trong Java
