@@ -91,7 +91,7 @@ public class Main {
         private void validateTile(String title){
             if(title == null || title.isEmpty())
                 throw new IllegalArgumentException("Tieu de khong duoc de trong!!!");
-            else if(!title.matches("[\\wÀ-ỹ\\p{Punct} ]+$"))
+            else if(!title.matches("^[\\wÀ-ỹ\\p{Punct} ]+$"))
                 throw new IllegalArgumentException("Tieu de bao gom cac chu cai, dau cau va dau cach ( )!!!");
         }
         //String showInfo
