@@ -110,11 +110,8 @@ SELECT * FROM student WHERE age >= 20;
 SELECT * FROM student WHERE email LIKE '%email.com';
 SELECT * FROM student WHERE email LIKE '%gmail.com';
 -- UPDATE student
-<<<<<<< HEAD
 UPDATE student SET student_name = 'su', age = 18, email = 'su@gmail.com' WHERE id = 1;
-=======
 UPDATE student SET student_name = 'su' WHERE email LIKE 'su@email.com';
->>>>>>> 9688594cb4c2799b1fb6acd4a67f8eb5a3eeeb3c
 SELECT * FROM student;
 -- DETELE FROM student
 DELETE FROM student WHERE id = 1;
