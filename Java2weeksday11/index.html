@@ -1,0 +1,144 @@
+<!--
+Day 11: HTML + CSS cơ bản
+
+1. HTML
+    a. Form <form></form>: tạo form nhập gửi dữ liệu.
+        - input type="": ô nhập dữ liệu.
+        Các type phổ biến:
+            + text: nhập chữ.
+            + number: nhập số.
+            + password: nhập mật khẩu.
+            + email: nhập email.
+
+        - label: nhãn mô tả input (giúp user biết cần nhập gì).
+        - button button type="": nút bấm trong form.
+        Các type phổ biến:
+            + submit: gửi dữ liệu của form đi (theo action + method).
+            + button: nút nhập không làm gì. Muốn dùng phải gắn JavaScript.
+            + reset: xóa dữ liệu đã nhập.
+            + Không ghi type: mặc định là submit.
+
+        Khi bấm nút submit, dữ liệu trong input sẽ được gửi đi (nếu có action).
+        Vd: form action="result.html" method="GET"  
+
+    b. Table: dùng để hiển thị dữ liệu dạng bảng.
+        - table: tạo khung bảng.
+        - tr (table row): một hàng.
+        - th (table header): ô tiêu đề (mặc định in đậm + căn giữa).
+        - td (table data): ô dữ liệu bình thường.
+
+2. CSS: dùng để trang trí giao diện HTML.
+- Inline css: viết ngay trong thẻ HTML bằng style="".
+    Vd: p style="color: red; font-size: 20px;"
+            Xin chào
+        /p
+
+- Internal css: viết trong <style></style>(trong file HTML).
+    Vd: !DOCTYPE html
+            head
+                style
+                    p {color: blue;}
+                /style
+            /head
+            body
+                pHello/p
+            /body
+        /html
+
+- External css: tạo file có đuôi .css + <link rel="stylesheet" href=""> ở <head>.
+    Vd: !DOCTYPE html
+            head
+                <link rel="stylesheet" href="style.css">
+            /head
+            body
+                pHello/p
+            /body
+        /html
+    file .css
+        p {
+            color: green;
+            font-size: 20px;
+        }
+
+    a. Layout 
+        - flexbox: căn chỉnh item dễ dàng.
+            + justify-content: căn ngang.
+            + align-items: căn dọc.
+
+        - display: cách phần tử hiển thị.
+        Các type phổ biến:
+            + block: chiếm full dòng.
+            + inline: nằm cùng hàng.
+            + flex: layout linh hoạt.
+    
+    b. Basic styling: css cơ bản.
+        - color: màu chữ.
+        - margin (đơn vị px): khoảng cách bên ngoài.
+        - padding (đơn vị px): tạo khoảng cách giữa content và viền.
+        - border (đơn vị px): đường viền (độ dày, kiểu, màu).
+-->
+<!----------------------------------------------------------------------------------------------------------------->
+<!--
+Bài tập: Form nhập sinh viên (HTML + CSS)
+
+Yêu cầu:
+    1. Tạo file index.html.
+    2. Tạo form nhập thông tin sinh viên gồm:
+        - Name (text)
+        - Age (number)
+        - Email (email)
+        - Button Submit
+    3. Hiển thị danh sách sinh viên bằng table bên dưới form.
+    4. Dùng CSS để:
+        - Căn giữa form
+        - Style input, button đẹp hơn (padding, border, hover)
+        - Table có border, header nổi bật
+    5. Sử dụng layout (flex hoặc basic CSS) để bố trí gọn gàng.
+
+Mục tiêu:
+    - Hiểu cách tạo form trong HTML
+    - Biết tạo table hiển thị dữ liệu
+    - Nắm CSS cơ bản để làm giao diện đẹp
+    - Làm quen layout (flexbox hoặc display)
+-->
+
+    
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" href="css/style.css">
+        <script src="js/script.js" defer></script>
+    </head>
+    <body>
+        <!--Form nhập thông tin sinh viên-->
+        <form id="form-student">
+            <!--Row 1-->
+            <div class="row-form">
+                <label class="column-1-form">Name</label>
+                <div class="column-2-form">
+                    <input type="text" id="student-name" oninput="check_student_name()" onchange="check_student_name()">
+                    <label id="error-student-name"></label>
+                </div>
+            </div>
+            <div class="row-form">
+                <label class="column-1-form">Age</label>
+                <div class="column-2-form">
+                    <input type="number" value="18" id="student-age" oninput="check_student_age()" onchange="check_student_age()">
+                    <label id="error-student-age"></label>
+                </div>
+            </div>
+            <div class="row-form">
+                <label class="column-1-form">Email</label>
+                <div class="column-2-form">
+                    <input type="email" id="student-email" oninput="check_student_email()" onchange="check_student_email()">
+                    <label id="error-student-email"></label>
+                </div>
+            </div>
+            <div class="row-form">
+                <button type="reset">Reset</button>
+                <button type="button" id="button-form-student">Submit</button>
+            </div>
+        </form>
+        <table id="table-students"></table>
+    </body>
+</html>
