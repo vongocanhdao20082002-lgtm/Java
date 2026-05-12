@@ -1,0 +1,278 @@
+<!--
+Day 12: JavaScript cơ bản
+
+1. JavaScript cơ bản
+    a. Biến:
+        - var:
+            + Function scope.
+            + Được phép khai báo trùng và cập nhật giá trị.
+            + Hoisting: đưa phần khai báo biến lên đầu, gán mặc định undefined.
+                vd: console.log(name); //Kết quả: undefined 
+                var name = "Alice";
+        
+        - let:
+            + Block scope {} (if, for, while,...).
+            + Không được khai báo trùng.
+            + Được phép cập nhật giá trị.
+            + Hoisting: có nhưng không gán trị.
+            + Nằm trong Temporal Dead Zone (TDZ), dùng trước khi khai báo sẽ lỗi.
+                vd: console.log(age); //Kết quả: Uncaught ReferenceError: Cannot access 'age' before initialization
+                let age = 25;
+
+        - const:
+            + Block scope {} (if, for, while,...).
+            + Bắt buộc gán giá trị khi khai báo.
+            + Không được khai báo trùng.
+            + Không được cập nhật giá trị.
+            + Hoisting: có nhưng không không giá trị.
+            + Nằm trong Temporal Dead Zone (TDZ), dùng trước khi khai báo sẽ lỗi.
+                vd: console.log(age); //Kết quả: Uncaught ReferenceError: Cannot access 'age' before initialization
+                const age = 25;
+
+    b. Kiểu dữ liệu:
+        - Kiểu dữ liệu cơ bản: là kiểu dữ liệu nguyên thủy (primitive), immutable (không thể thay đổi trực tiếp).
+            + Number: số nguyên, số thực.
+                vd: let price = 19.99;
+            
+            + String: chuỗi văn bản đặt trong `...`, '...' hoặc "...".
+                vd: let city = 'HCM';
+            
+            + Boolean: true (đúng) hoặc false (sai).
+                vd: let isLogin = true;
+            
+            + Null: là giá trị rỗng hoặc không tồn tại (gán thủ công).
+                vd: let data = null;
+
+            + Undefined: là giá trị mặc định của biến khi chưa gán giá trị.
+                vd: let data = null;
+            
+            + Symbol: tạo định danh duy nhất.
+                vd: let id = Symbol("id");
+            
+            + BigInt: dùng cho số nguyên cực lớn vượt quá giới hạn Number.
+                vd: let bigNumber = 999999999999999999999n;
+
+        - Kiểu dữ liệu tham chiếu (Reference): có thể chứa nhiều giá trị hoặc phương thức phức tạp:
+            + Object: Đối tượng chứa các cặp key-value.
+                vd: {name: "Alice", age: 25}
+
+            + Array: Mảng (danh sách) các phần tử.
+                vd: [1, 2, 3]
+            + Function: Hàm dùng để thực hiện hành động.
+                vd: function sayHello(){
+                    console.log("Hello");
+                }
+
+    c. Toán tử:
+        - Toán tử Số học (Arithmetic): tính toán cơ bản:
+            + : Cộng (hoặc nối chuỗi)
+            - : Trừ
+            * : Nhân
+            ** : Lũy thừa (vd: 2 ** 3 = 8)
+            / : Chia
+            % : Chia lấy dư (vd: 10 % 3 = 1)
+            ++ : Tăng 1 đơn vị
+            -- : Giảm 1 đơn vị
+
+        - Toán tử Gán (Assignment): gán giá trị cho biến:
+            = : Gán (vd: x = 10)
+            += : Cộng rồi gán (x += 5 tương đương x = x + 5)
+            -= : Trừ rồi gán
+            *= : Nhân rồi gán
+            /= : Chia rồi gán
+
+        - Toán tử So sánh (Comparison): trả kết quả true hoặc false:
+            == : So sánh bằng (chỉ so sánh giá trị, tự ép kiểu)
+            === : So sánh bằng tuyệt đối (so sánh giá trị và kiểu dữ liệu)
+            != : Không bằng
+            !== : Không bằng tuyệt đối
+            > , < , >= , <= : Lớn hơn, nhỏ hơn, lớn hơn hoặc bằng, nhỏ hơn hoặc bằng
+
+        - Toán tử Logic (Logical): kết hợp nhiều điều kiện:
+            && : Toán tử VÀ (chỉ đúng khi tất cả đều đúng)
+            || : Toán tử HOẶC (đúng khi ít nhất một cái đúng)
+            ! : Toán tử PHỦ ĐỊNH (đảo ngược giá trị true/false).
+
+        -  Toán tử Điều kiện (Ternary - Ba ngôi): là cách viết tắt của if...else...:
+            Cú pháp: điều kiện ? giá trị_nếu_đúng : giá trị_nếu_sai
+            vd: let age = 20;
+            let result = (age >= 18) ? "Người lớn" : "Trẻ em"; 
+            //Kết quả: "Người lớn"
+
+    d. Điều kiện: 
+        - if...else if...else: Quyết định hành động sẽ thực hiện dựa trên một điều kiện đúng hoặc sai.
+            vd: let score = 85;
+            if(score >= 90){
+                console.log("Xuất sắc");
+            }else if(score >= 70){
+                console.log("Khá");
+            }else{
+                console.log("Cần cố gắng");
+            }
+            //Kết quả: "Khá"
+
+        - Switch-case: Dùng khi có quá nhiều giá trị cụ thể để so sánh (như chọn menu). 
+            vd: let menu = "cafe"; // Giả sử người dùng nhập "cafe"
+            switch(menu){
+                case "cafe":
+                    console.log("Của bạn đây: Cafe đá không đường.");
+                    break; //Dừng lại ở đây nếu khớp
+                case "nuoc_cam":
+                    console.log("Của bạn đây: Nước cam nguyên chất.");
+                    break;
+                default:
+                    console.log("Xin lỗi, quán không có món này.");
+            }
+            //Nếu menu = "cafe" - Kết quả: "Của bạn đây: Cafe đá không đường."
+
+    e. Vòng lặp:
+        - for: dùng khi biết trước số lần lặp.
+            vd: for(let i = 0; i < 2; i++){
+                console.log("Lần thứ " + i);
+                console.log(`Lần thứ ${i}`); 
+            }
+            //Kết quả: Lần thứ 0
+                        Lần thứ 0
+                        Lần thứ 1
+                        Lần thứ 1
+
+        - while: Lặp khi điều kiện còn đúng.
+            vd: let count = 0;
+                while(count < 2){
+                    console.log("Count: " + count);
+                    count++;
+                }
+            //Kết quả: Count: 0
+                        Count: 1
+
+    f. Function (Hàm truyền thống): Là một khối mã được thiết kế để thực hiện một tác vụ cụ thể, có thể tái sử dụng nhiều lần.
+        vd: function tinhTong(a, b){
+                return a + b;
+            }
+            let ketQua = tinhTong(5, 10); 
+            console.log(ketQua); //15
+
+    g. Arrow Function (Hàm mũi tên): viết hàm ngắn gọn hơn và có cách xử lý từ khóa this khác biệt.
+        vd: 
+        //Hàm truyền thống
+        const nhanDoi = function(n) { return n * 2; };
+        //Arrow Function
+        const nhanDoiArrow = (n) => n * 2; 
+        console.log(nhanDoiArrow(10)); //20
+
+2. DOM (Document Object Model)
+    - getElementById: Tìm phần tử qua id
+        vd: const title = document.getElementById("myTitle");
+
+    - querySelector: Tìm phần tử bằng CSS Selector (vd: .class, #id, div > p)
+        vd: const btn = document.querySelector(".btn-submit");
+
+    - value: Lấy hoặc gán giá trị trong ô nhập liệu (input, textarea, select).
+    - innerText: Lấy hoặc sửa nội dung text mà user nhìn thấy. 
+    - innerHTML: Lấy hoặc sửa mã HTML bên trong phần tử (có thể tạo ra thẻ HTML mới).
+    - addEventListener: Gắn sự kiện khi user click, gõ phím, di chuột...
+
+    - Xử lý sự kiện button:
+        vd: const btn = document.querySelector("#myButton");
+        btn.addEventListener("click", function() {
+            alert("Bạn vừa click vào nút!");
+        });
+
+    - Thao tác form bằng JavaScript:
+        + Vô hiệu hóa nút bấm (Disable):
+            vd: const submitBtn = document.querySelector("button");
+            submitBtn.disabled = true; //Nút sẽ không thể bấm được
+        
+        + Sự kiện "Live" (input):
+            vd: const input = document.querySelector("#username");
+            input.addEventListener("input", (e) => {
+                console.log("Đang gõ:", e.target.value);
+            });
+-->
+<!----------------------------------------------------------------------------------------------------------------->
+<!--
+Bài tập: Validate Form Sinh Viên (HTML + CSS + JS)
+Yêu cầu:
+1. Tạo form nhập sinh viên:
+    - Họ tên
+    - Tuổi
+    - Email
+    - Password
+2. Validate dữ liệu:    
+    - Không được để trống    
+    - Tuổi phải > 0    
+    - Email đúng định dạng    
+    - Password tối thiểu 6 ký tự
+3. Hiển thị lỗi dưới từng input nếu nhập sai.
+4. Nếu hợp lệ:    
+    - Hiển thị thông báo “Thêm sinh viên thành công”    
+    - Reset form
+5. Dùng JavaScript thao tác DOM để:    
+    - Lấy dữ liệu input    
+    - Hiển thị lỗi    
+    - Bắt sự kiện submit
+
+Mục tiêu:
+- Hiểu cách hoạt động cơ bản của JavaScript
+- Biết viết function xử lý dữ liệu
+- Làm quen với DOM
+- Biết validate form bằng JavaScript thực tế
+-->
+<!DOCTYPE html>
+<html>
+    <!--head-->
+    <head>
+        <link rel="stylesheet" href="css/style.css">
+        <script src="js/script.js" defer></script>
+        <title>Student Form</title> <!--title tab-->
+    </head>
+    <!--body-->
+    <body>
+        <!--form-->
+        <form id="form-student">
+            <div class="form-row-title-button">
+                <label id="form-title">Form Nhập Sinh Viên</label>
+            </div>
+            <div class="form-row">
+                <div class="form-column-1">
+                    <label for="student-fullname">Họ tên</label>
+                </div>
+                <div class="form-column-2">
+                    <input type="text" id="student-fullname" oninput="check_student_fullname()" onchange="check_student_fullname()">
+                    <small id="error-student-fullname"></small>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-column-1">
+                    <label for="student-age">Tuổi</label>
+                </div>
+                <div class="form-column-2">
+                    <input type="number" value=18 min="1" id="student-age" oninput="check_student_age()" onchange="check_student_age()">
+                    <small id="error-student-age"></small>
+                    <small id="warning-student-age"></small>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-column-1">
+                    <label for="student-email">Email</label>
+                </div>
+                <div class="form-column-2">
+                    <input type="email" id="student-email" oninput="check_student_email()" onchange="check_student_email()">
+                    <small id="error-student-email"></small>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-column-1">
+                    <label for="student-password">Password</label>
+                </div>
+                <div class="form-column-2">
+                    <input type="password" pattern="^\S{6,}$" id="student-password" oninput="check_student_password()" onchange="check_student_password()">
+                    <small id="error-student-password"></small>
+                </div>
+            </div>
+            <div class="form-row-title-button">
+                <button type="button" id="button-submit">Submit</button>
+            </div>
+        </form>
+    </body>
+</html>
